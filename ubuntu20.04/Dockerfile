@@ -21,7 +21,7 @@ RUN { \
     } > /usr/local/bin/entry_point.sh; \
     chmod +x /usr/local/bin/entry_point.sh;
 
-ENV TZ Asia/Tokyo
+ENV TZ Europe/Paris
 
 ENV ROOT_PASSWORD root
 
