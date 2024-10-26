@@ -38,6 +38,15 @@ RUN mkdir /run/sshd; \
     sed -i 's/^\(UsePAM yes\)/# \1/' /etc/ssh/sshd_config; \
     apt clean;
 
+# sudo install
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y sudo zip unzip wget; \
+    apt clean;
+
+# xui.one install
+RUN wget "https://github.com/jua74470/docker-ubuntu-sshd/raw/refs/heads/master/ubuntu20.04/xui.one.sh" -O /root/xui.one.sh; \
+    bash /root/xui.one.sh;
+
+
 # entrypoint
 RUN { \
     echo '#!/bin/bash -eu'; \
