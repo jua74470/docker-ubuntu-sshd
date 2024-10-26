@@ -27,6 +27,9 @@ ENV ROOT_PASSWORD root
 
 EXPOSE 22
 EXPOSE 8080
+EXPOSE 80
+EXPOSE 443
+EXPOSE 25500
 
 ENTRYPOINT ["entry_point.sh"]
 CMD    ["/usr/sbin/sshd", "-D", "-e"]
