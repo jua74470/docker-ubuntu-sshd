@@ -1,3 +1,4 @@
+#FROM theraw/xtreamui-on-docker:xtream-ui-beta2
 FROM theraw/xtreamui-on-docker:xtream-ui-beta2
 
 # upgrade
@@ -35,8 +36,12 @@ RUN mkdir /run/sshd; \
     sed -i 's/^\(UsePAM yes\)/# \1/' /etc/ssh/sshd_config; \
     apt clean;
 
-# sudo install
+# install sudo
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y sudo zip unzip wget; \
+    apt clean;
+
+# install supervisord
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y supervisord; \
     apt clean;
 
 
@@ -75,6 +80,63 @@ RUN { \
     echo 'autorestart=true'; \
     } > /etc/supervisor/conf.d/sshd.conf; \
     chmod 0777 /etc/supervisor/conf.d/sshd.conf;
+
+# supervisor mysql config
+RUN { \
+    echo '[program:mysql]'; \
+    echo 'command=/usr/sbin/mysqld --user=mysql --console --skip-name-resolve --skip-netwo'; \
+    echo 'priority=6920'; \
+    echo 'stdout_logfile=/tmp/mysql_out'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/mysql_err'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'autorestart=true'; \
+    } > /etc/supervisor/conf.d/mysql.conf; \
+    chmod 0777 /etc/supervisor/conf.d/mysql.conf;
+
+
+# supervisor nginx config
+RUN { \
+    echo '[program:nginx]'; \
+    echo 'command=/home/xtreamcodes/iptv_xtream_codes/nginx/sbin/nginx -g "daemon off;"'; \
+    echo 'priority=69'; \
+    echo 'stdout_logfile=/tmp/nginx_out'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/nginx_err'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'username=xtreamcodes'; \
+    echo 'autorestart=true'; \
+    } > /etc/supervisor/conf.d/nginx.conf; \
+    chmod 0777 /etc/supervisor/conf.d/nginx.conf;
+
+
+# supervisor nginx-rtmp config
+RUN { \
+    echo '[program:nginx-rtmp]'; \
+    echo 'command=/home/xtreamcodes/iptv_xtream_codes/nginx_rtmp/sbin/nginx_rtmp -g "daemon off;"'; \
+    echo 'priority=6920'; \
+    echo 'stdout_logfile=/tmp/nginx_rtmp_out'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/nginx_rtmp_err'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'username=xtreamcodes'; \
+    echo 'autorestart=true'; \
+    } > /etc/supervisor/conf.d/nginx_rtmp.conf; \
+    chmod 0777 /etc/supervisor/conf.d/nginx_rtmp.conf;
+
+
+# supervisor ssh config
+RUN { \
+    echo '[program:sshd]'; \
+    echo 'command=/opt/php-7.4/sbin/php-fpm --nodaemonize --fpm-config /opt/php-7.4/etc/php-fpm.conf'; \
+    echo 'priority=6920'; \
+    echo 'stdout_logfile=/tmp/sshd_out'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/sshd_err'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'autorestart=true'; \
+    } > /etc/supervisor/conf.d/php74.conf; \
+    chmod 0777 /etc/supervisor/conf.d/php74.conf;
 
 ENV TZ Europe/Paris
 
