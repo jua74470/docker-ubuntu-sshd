@@ -26,6 +26,7 @@ ENV TZ Europe/Paris
 ENV ROOT_PASSWORD root
 
 EXPOSE 22
+EXPOSE 8080
 
 ENTRYPOINT ["entry_point.sh"]
 CMD    ["/usr/sbin/sshd", "-D", "-e"]
