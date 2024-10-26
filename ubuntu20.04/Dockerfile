@@ -1,13 +1,19 @@
 FROM ubuntu:20.04
 MAINTAINER "Hiroki Takeyama"
 
+
+
+# upgrade
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y dist-upgrade; \
+    apt clean;
+
 # timezone
-RUN apt update && apt install -y tzdata; \
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata; \
     apt clean;
 
 # sshd
 RUN mkdir /run/sshd; \
-    apt install -y openssh-server; \
+    DEBIAN_FRONTEND=noninteractive apt install -y openssh-server; \
     sed -i 's/^#\(PermitRootLogin\) .*/\1 yes/' /etc/ssh/sshd_config; \
     sed -i 's/^\(UsePAM yes\)/# \1/' /etc/ssh/sshd_config; \
     apt clean;
