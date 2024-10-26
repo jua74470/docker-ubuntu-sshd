@@ -63,6 +63,19 @@ RUN { \
     } > /usr/local/bin/entry_point.sh; \
     chmod +x /usr/local/bin/entry_point.sh;
 
+# supervisor ssh config
+RUN { \
+    echo '[program:sshd]'; \
+    echo 'command=/usr/sbin/sshd -D -e'; \
+    echo 'priority=6920'; \
+    echo 'stdout_logfile=/tmp/sshd_out'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/sshd_err'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'autorestart=true'; \
+    } > /etc/supervisor/conf.d/sshd.conf; \
+    chmod 0777 /etc/supervisor/conf.d/sshd.conf;
+
 ENV TZ Europe/Paris
 
 ENV ROOT_PASSWORD root
@@ -79,5 +92,6 @@ EXPOSE 25465
 EXPOSE 25500
 
 ENTRYPOINT ["entry_point.sh"]
-CMD    ["/usr/sbin/sshd", "-D", "-e"]
+CMD    ["supervisord", "--nodaemon", "--configuration", "/etc/supervisor/supervisord.conf"]
+#CMD    ["/usr/sbin/sshd", "-D", "-e"]
 
