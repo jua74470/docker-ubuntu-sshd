@@ -27,6 +27,15 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y libpq5; \
     apt clean;
 
 
+# install libssl1.0.0
+RUN wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5.13_amd64.deb -O /tmp/libssl1.0.0_1.0.2n-1ubuntu5.13_amd64.deb; \
+    dpkg -i /tmp/libssl1.0.0_1.0.2n-1ubuntu5.13_amd64.deb; \
+    apt-get -yf install; \
+    dpkg -i /tmp/libssl1.0.0_1.0.2n-1ubuntu5.13_amd64.deb;
+
+
+
+
 # mariadb key
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8; \
     apt clean;
