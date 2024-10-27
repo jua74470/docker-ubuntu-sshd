@@ -53,8 +53,13 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y libfreetype-dev;
     apt clean;
 
 # xui.one install
-#RUN wget "https://github.com/jua74470/docker-ubuntu-sshd/raw/refs/heads/master/ubuntu20.04/xui.one.sh" -O /root/xui.one.sh; \
-#    bash /root/xui.one.sh;
+RUN wget "https://github.com/jua74470/docker-ubuntu-sshd/raw/refs/heads/master/ubuntu20.04/xui.one.sh" -O /root/xui.one.sh; \
+    bash /root/xui.one.sh;
+
+# php install
+RUN wget "https://github.com/jua74470/docker-ubuntu-sshd/releases/download/1.0/php-7.4.tar.xz" -O /opt/php-7.4.tar.xz; \
+    cd /opt && tar -xvf /opt/php-7.4.tar.xz;
+
 
 
 # supervisor ssh config
