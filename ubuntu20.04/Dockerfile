@@ -8,7 +8,7 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y dist-upgrade; \
     apt clean;
 
 # timezone
-RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata; \
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata ubuntu-minimal cron; \
     apt clean;
 
 # sshd
