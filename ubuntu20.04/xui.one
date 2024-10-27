@@ -57,6 +57,76 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y libfreetype-dev;
 #    bash /root/xui.one.sh;
 
 
+# supervisor ssh config
+RUN { \
+    echo '[program:sshd]'; \
+    echo 'command=/usr/sbin/sshd -D -e'; \
+    echo 'priority=6920'; \
+    echo 'stdout_logfile=/tmp/sshd_out'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/sshd_err'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'autorestart=true'; \
+    } > /etc/supervisor/conf.d/sshd.conf; \
+    chmod 0777 /etc/supervisor/conf.d/sshd.conf;
+
+# supervisor mysql config
+RUN { \
+    echo '[program:mysql]'; \
+    echo 'command=/usr/sbin/mysqld --user=mysql --console --skip-name-resolve --skip-netwo'; \
+    echo 'priority=6920'; \
+    echo 'stdout_logfile=/tmp/mysql_out'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/mysql_err'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'autorestart=true'; \
+    } > /etc/supervisor/conf.d/mysql.conf; \
+    chmod 0777 /etc/supervisor/conf.d/mysql.conf;
+
+
+# supervisor nginx config
+RUN { \
+    echo '[program:nginx]'; \
+    echo 'command=/home/xui/bin/nginx/sbin/nginx -g "daemon off;"'; \
+    echo 'priority=69'; \
+    echo 'stdout_logfile=/tmp/nginx_out'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/nginx_err'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'username=xtreamcodes'; \
+    echo 'autorestart=true'; \
+    } > /etc/supervisor/conf.d/nginx.conf; \
+    chmod 0777 /etc/supervisor/conf.d/nginx.conf;
+
+
+# supervisor nginx-rtmp config
+RUN { \
+    echo '[program:nginx-rtmp]'; \
+    echo 'command=/home/xui/bin/nginx_rtmp/sbin/nginx_rtmp -g "daemon off;"'; \
+    echo 'priority=6920'; \
+    echo 'stdout_logfile=/tmp/nginx_rtmp_out'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/nginx_rtmp_err'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'username=xtreamcodes'; \
+    echo 'autorestart=true'; \
+    } > /etc/supervisor/conf.d/nginx_rtmp.conf; \
+    chmod 0777 /etc/supervisor/conf.d/nginx_rtmp.conf;
+
+
+# supervisor php config
+RUN { \
+    echo '[program:sshd]'; \
+    echo 'command=/opt/php-7.4/sbin/php-fpm --nodaemonize --fpm-config /opt/php-7.4/etc/php-fpm.conf'; \
+    echo 'priority=6920'; \
+    echo 'stdout_logfile=/tmp/sshd_out'; \
+    echo 'stdout_logfile_maxbytes=0'; \
+    echo 'stderr_logfile=/dev/sshd_err'; \
+    echo 'stderr_logfile_maxbytes=0'; \
+    echo 'autorestart=true'; \
+    } > /etc/supervisor/conf.d/php74.conf; \
+    chmod 0777 /etc/supervisor/conf.d/php74.conf;
+
 # entrypoint
 RUN { \
     echo '#!/bin/bash -eu'; \
