@@ -15,6 +15,10 @@ RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata; \
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt-get -y install software-properties-common; \
     apt clean;
 
+# install supervisord
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y supervisord; \
+    apt clean;
+
 # mariadb key
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8; \
     apt clean;
