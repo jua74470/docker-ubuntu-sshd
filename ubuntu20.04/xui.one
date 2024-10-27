@@ -103,6 +103,7 @@ RUN { \
     echo 'stderr_logfile_maxbytes=0'; \
     echo 'autorestart=true'; \
     } > /etc/supervisor/conf.d/mysql.conf; \
+    chmod 1777 /tmp; \
     chmod 0777 /etc/supervisor/conf.d/mysql.conf;
 
 
