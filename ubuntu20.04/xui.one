@@ -7,6 +7,10 @@ MAINTAINER "Hiroki Takeyama"
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y dist-upgrade; \
     apt clean;
 
+# libzip5
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y libzip5; \
+    apt clean;
+
 # timezone
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y tzdata; \
     apt clean;
